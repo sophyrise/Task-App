@@ -8,7 +8,6 @@ import com.sophie.tasks.mappers.TaskListMapper;
 import com.sophie.tasks.mappers.TaskMapper;
 import org.springframework.stereotype.Component;
 
-import java.awt.*;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,7 +19,6 @@ public class TaskListMapperImpl implements TaskListMapper {
     public TaskListMapperImpl(TaskMapper taskMapper) {
         this.taskMapper = taskMapper;
     }
-
 
     @Override
     public TaskList fromDto(TaskListDto taskListDto) {
@@ -49,18 +47,23 @@ public class TaskListMapperImpl implements TaskListMapper {
                         .orElse(0),
                 calculateTaskListProgress(taskList.getTasks()),
                 Optional.ofNullable(taskList.getTasks())
-                        .map(tasks -> tasks.stream().map(taskMapper::toDto).toList())
-                                .orElse(null)
+                        .map(tasks ->
+                                tasks.stream().map(taskMapper::toDto).toList()
+                        ).orElse(null)
         );
     }
 
     private Double calculateTaskListProgress(List<Task> tasks) {
-        if(tasks == null) return null;
+        if (tasks == null || tasks.isEmpty()) {
+            return 0.0;
+        }
 
-        long closedTaskCount = tasks.stream().filter(task ->
-                TaskStatus.CLOSED == task.getStatus()
-        ).count();
+        long closedTaskCount = tasks.stream()
+                .filter(task -> TaskStatus.CLOSED == task.getStatus())
+                .count();
 
-        return (double) closedTaskCount / tasks.size();
+        return (double) closedTaskCount / (double) tasks.size();
     }
+
 }
+

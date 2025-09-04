@@ -16,7 +16,7 @@ public class TaskMapperImpl implements TaskMapper {
                 taskDto.description(),
                 taskDto.dueDate(),
                 taskDto.status(),
-                taskDto.taskPriority(),
+                taskDto.priority(),
                 null,
                 null,
                 null
