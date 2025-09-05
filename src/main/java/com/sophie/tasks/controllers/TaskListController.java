@@ -1,11 +1,10 @@
 package com.sophie.tasks.controllers;
 
 import com.sophie.tasks.domain.dto.TaskListDto;
+import com.sophie.tasks.domain.entities.TaskList;
 import com.sophie.tasks.mappers.TaskListMapper;
 import com.sophie.tasks.services.TaskListService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -28,4 +27,13 @@ public class TaskListController {
                 .map(taskListMapper::toDto)
                 .toList();
     }
+
+    @PostMapping
+    public TaskListDto createTaskList(@RequestBody TaskListDto taskListDto) {
+        TaskList createdTaskList = taskListService.createTaskList(
+                taskListMapper.fromDto(taskListDto)
+        );
+        return taskListMapper.toDto(createdTaskList);
+    }
+
 }
